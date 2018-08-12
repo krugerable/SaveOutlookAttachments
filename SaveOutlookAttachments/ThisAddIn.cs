@@ -13,15 +13,13 @@ namespace SaveOutlookAttachments
     {
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            this.Application.NewMail += new Microsoft.Office.Interop.Outlook
-                .ApplicationEvents_11_NewMailEventHandler(ThisApplication_NewMail);
+            Application.NewMail += new Outlook.ApplicationEvents_11_NewMailEventHandler(ThisApplication_NewMail);
         }
 
         private void ThisApplication_NewMail()
         {
             Outlook.MAPIFolder inBox = this.Application.ActiveExplorer()
-                .Session.GetDefaultFolder(Outlook
-                .OlDefaultFolders.olFolderInbox);
+                .Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox);
             Outlook.Items inBoxItems = inBox.Items;
             Outlook.MailItem newEmail = null;
             inBoxItems = inBoxItems.Restrict("[Unread] = true");
@@ -34,12 +32,9 @@ namespace SaveOutlookAttachments
                     {
                         if (newEmail.Attachments.Count > 0)
                         {
-                            for (int i = 1; i <= newEmail
-                               .Attachments.Count; i++)
+                            for (int i = 1; i <= newEmail.Attachments.Count; i++)
                             {
-                                newEmail.Attachments[i].SaveAsFile
-                                    (@"C:\TestFileSave\" +
-                                    newEmail.Attachments[i].FileName);
+                                newEmail.Attachments[i].SaveAsFile(@"C:\TestFileSave\" + newEmail.Attachments[i].FileName);
                             }
                         }
                     }
@@ -47,8 +42,7 @@ namespace SaveOutlookAttachments
             }
             catch (Exception ex)
             {
-                string errorInfo = (string)ex.Message
-                    .Substring(0, 11);
+                string errorInfo = (string)ex.Message.Substring(0, 11);
                 if (errorInfo == "Cannot save")
                 {
                     MessageBox.Show(@"Create Folder C:\TestFileSave");
